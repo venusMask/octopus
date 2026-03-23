@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Properties>
-        <!-- 日志根目录：指向多模块项目根目录下的 logs 文件夹 -->
-        <Property name="LOG_DIR">${sys:maven.multiModuleProjectDirectory}/logs</Property>
+        <!-- 日志根目录：当前工作目录（即各模块目录）下的 logs 文件夹 -->
+        <Property name="LOG_DIR">logs</Property>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
     </Properties>
 
