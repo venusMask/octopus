@@ -22,7 +22,22 @@
     </dependency>
     <dependency>
       <groupId>org.venus</groupId>
+      <artifactId>octopus-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.venus</groupId>
       <artifactId>octopus-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.venus</groupId>
+      <artifactId>octopus-memory</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.venus</groupId>
+      <artifactId>octopus-plugins</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
