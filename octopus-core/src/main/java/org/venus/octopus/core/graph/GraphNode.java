@@ -1,11 +1,7 @@
 package org.venus.octopus.core.graph;
 
 import org.venus.octopus.api.agent.AgentState;
-import org.venus.octopus.api.graph.EdgeCondition;
 import org.venus.octopus.api.graph.Node;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * 图的节点内部包装类
