@@ -1,6 +1,10 @@
-package org.venus.octopus.core.prompt;
+package org.venus.octopus.core.message;
 
+import org.venus.octopus.common.config.Configuration;
+import org.venus.octopus.common.config.ReadableConfig;
 import org.venus.octopus.common.utils.AssertUtils;
+import org.venus.octopus.core.message.config.MissingVariablePolicy;
+import org.venus.octopus.core.message.config.PromptOptions;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -17,10 +21,17 @@ public class PromptTemplate {
     private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{([a-zA-Z0-9_]+)\\}");
 
     private final String template;
+    private final ReadableConfig config;
 
     public PromptTemplate(String template) {
+        this(template, new Configuration());
+    }
+
+    public PromptTemplate(String template, ReadableConfig config) {
         AssertUtils.notNull(template, "模板内容不能为 null");
+        AssertUtils.notNull(config, "配置不能为 null");
         this.template = template;
+        this.config = config;
     }
 
     /**
@@ -40,13 +51,20 @@ public class PromptTemplate {
 
         while (matcher.find()) {
             String varName = matcher.group(1);
-            Object value = variables.get(varName);
-            // 若变量不存在，可选择保留原样，或替换为空串。此处选择替换为空串并严格记录或略过。
-            // 为了兼顾容错性，如果不包含该 key，保留原样
+
             if (variables.containsKey(varName)) {
+                Object value = variables.get(varName);
                 matcher.appendReplacement(result, value == null ? "" : Matcher.quoteReplacement(value.toString()));
             } else {
-                matcher.appendReplacement(result, Matcher.quoteReplacement("{" + varName + "}"));
+                MissingVariablePolicy policy = config.get(PromptOptions.MISSING_VARIABLE_POLICY);
+                if (policy == MissingVariablePolicy.REPLACE_EMPTY) {
+                    matcher.appendReplacement(result, "");
+                } else if (policy == MissingVariablePolicy.THROW_EXCEPTION) {
+                    throw new IllegalArgumentException("模板缺少必要的变量注入: " + varName);
+                } else {
+                    // 默认行为：KEEP_ORIGINAL
+                    matcher.appendReplacement(result, Matcher.quoteReplacement("{" + varName + "}"));
+                }
             }
         }
         matcher.appendTail(result);

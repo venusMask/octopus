@@ -6,7 +6,7 @@ import org.venus.octopus.api.message.AiMessage;
 import org.venus.octopus.api.message.HumanMessage;
 import org.venus.octopus.api.message.Message;
 import org.venus.octopus.api.message.ToolMessage;
-import org.venus.octopus.core.prompt.MessageBuilder;
+import org.venus.octopus.core.message.MessageBuilder;
 import org.venus.octopus.core.state.MessagesState;
 import org.venus.octopus.memory.InMemoryChatMemory;
 

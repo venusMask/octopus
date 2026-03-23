@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/octopus-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-examples/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-examples/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-mcp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-mcp/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-memory/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-memory/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-plugins/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-plugins/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/octopus-test/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

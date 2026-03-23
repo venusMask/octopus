@@ -1,6 +1,8 @@
-package org.venus.octopus.core.prompt;
+package org.venus.octopus.core.message;
 
 import org.venus.octopus.api.message.*;
+import org.venus.octopus.common.config.Configuration;
+import org.venus.octopus.common.config.ReadableConfig;
 import org.venus.octopus.common.utils.AssertUtils;
 
 import java.util.ArrayList;
@@ -16,9 +18,11 @@ import java.util.Map;
 public class MessageBuilder {
 
     private final List<Message> messages;
+    private ReadableConfig config;
 
     private MessageBuilder() {
         this.messages = new ArrayList<>();
+        this.config = new Configuration();
     }
 
     /**
@@ -26,6 +30,16 @@ public class MessageBuilder {
      */
     public static MessageBuilder builder() {
         return new MessageBuilder();
+    }
+
+    /**
+     * 配置当前构建器的环境设置
+     */
+    public MessageBuilder withConfig(ReadableConfig config) {
+        if (config != null) {
+            this.config = config;
+        }
+        return this;
     }
 
     /**
@@ -55,9 +69,17 @@ public class MessageBuilder {
     }
 
     /**
-     * 追加 System 消息 (基于模板)
+     * 追加 System 消息 (基于模板对象)
      */
     public MessageBuilder system(PromptTemplate template, Map<String, Object> variables) {
+        return system(template.format(variables));
+    }
+
+    /**
+     * 追加 System 消息 (基于字符串模板和 builder 内部配置)
+     */
+    public MessageBuilder system(String templateStr, Map<String, Object> variables) {
+        PromptTemplate template = new PromptTemplate(templateStr, this.config);
         return system(template.format(variables));
     }
 
@@ -69,9 +91,17 @@ public class MessageBuilder {
     }
 
     /**
-     * 追加 Human 消息 (基于模板)
+     * 追加 Human 消息 (基于模板对象)
      */
     public MessageBuilder human(PromptTemplate template, Map<String, Object> variables) {
+        return human(template.format(variables));
+    }
+
+    /**
+     * 追加 Human 消息 (基于字符串模板和 builder 内部配置)
+     */
+    public MessageBuilder human(String templateStr, Map<String, Object> variables) {
+        PromptTemplate template = new PromptTemplate(templateStr, this.config);
         return human(template.format(variables));
     }
 
