@@ -13,8 +13,7 @@ description: Octopus Agent 的代码格式化验证与规范提交流程 (Commit
    `mvn spotless:apply`
 
 2. **验证编译与全量测试拦截**
-   在提交至仓库前，必须跑完所有的 test（包括单元测试与端到端集成测试），确保新加入的内容对所有下属 7 个模块的依赖与功能均无破坏：
-   `mvn clean test`
+   在提交至仓库前，必须跑完所有的 test（包括单元测试与端到端集成测试），确保新加入的内容对所有下属 7 个模块的依赖与功能均无破坏： mvn clean test
 
 3. **组织 Commit Msg**
    使用符合规范的 AngularJS 提交模板结构提交变更。格式为 `<type>(<scope>): <subject>`：
