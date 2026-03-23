@@ -1,9 +1,8 @@
 package org.venus.octopus.core.checkpoint;
 
-import org.venus.octopus.api.agent.AgentState;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import org.venus.octopus.api.agent.AgentState;
 
 /**
  * 基于内存的检查点实现

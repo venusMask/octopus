@@ -1,18 +1,16 @@
 package org.venus.octopus.core.graph;
 
-import org.junit.jupiter.api.Test;
-import org.venus.octopus.api.graph.CompiledGraph;
-import org.venus.octopus.api.graph.Graph;
-import org.venus.octopus.api.message.HumanMessage;
-import org.venus.octopus.common.exception.GraphException;
-import org.venus.octopus.core.state.MapAgentState;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.venus.octopus.api.graph.CompiledGraph;
+import org.venus.octopus.api.graph.Graph;
+import org.venus.octopus.common.exception.GraphException;
+import org.venus.octopus.core.state.MapAgentState;
 
 /**
  * StateGraph 核心功能单元测试
@@ -78,7 +76,7 @@ class StateGraphTest {
     @Test
     void testConditionalEdge_shouldRouteToCorrectNode() {
         CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .addNode("router", state -> state)  // 不修改状态
+                .addNode("router", state -> state) // 不修改状态
                 .addNode("pathA", state -> {
                     state.put("path", "A");
                     return state;
@@ -88,9 +86,8 @@ class StateGraphTest {
                     return state;
                 })
                 .addEdge(Graph.START, "router")
-                .addConditionalEdges("router",
-                        state -> (String) state.get("direction"),
-                        Map.of("A", "pathA", "B", "pathB"))
+                .addConditionalEdges(
+                        "router", state -> (String) state.get("direction"), Map.of("A", "pathA", "B", "pathB"))
                 .addEdge("pathA", Graph.END)
                 .addEdge("pathB", Graph.END)
                 .compile();
@@ -111,8 +108,14 @@ class StateGraphTest {
     @Test
     void testStream_shouldReturnOutputForEachNode() {
         CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .addNode("nodeA", state -> { state.put("a", 1); return state; })
-                .addNode("nodeB", state -> { state.put("b", 2); return state; })
+                .addNode("nodeA", state -> {
+                    state.put("a", 1);
+                    return state;
+                })
+                .addNode("nodeB", state -> {
+                    state.put("b", 2);
+                    return state;
+                })
                 .addEdge(Graph.START, "nodeA")
                 .addEdge("nodeA", "nodeB")
                 .addEdge("nodeB", Graph.END)
@@ -145,9 +148,8 @@ class StateGraphTest {
                     return state;
                 })
                 .addEdge(Graph.START, "agent")
-                .addConditionalEdges("agent",
-                        state -> (String) state.get("next"),
-                        Map.of("tools", "tools", "end", Graph.END))
+                .addConditionalEdges(
+                        "agent", state -> (String) state.get("next"), Map.of("tools", "tools", "end", Graph.END))
                 .addEdge("tools", "agent")
                 .compile();
 
@@ -163,8 +165,7 @@ class StateGraphTest {
 
     @Test
     void testMissingEntryEdge_shouldThrowGraphException() {
-        StateGraph<MapAgentState> graph = new StateGraph<>(MapAgentState::new)
-                .addNode("node", state -> state);
+        StateGraph<MapAgentState> graph = new StateGraph<>(MapAgentState::new).addNode("node", state -> state);
         // 没有 addEdge(Graph.START, ...)
 
         assertThrows(GraphException.class, graph::compile);
@@ -190,10 +191,10 @@ class StateGraphTest {
     void testMaxIterationsExceeded_shouldThrowGraphException() {
         // 构建一个无终止条件的循环图
         CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .withMaxIterations(5)  // 最多 5 次
+                .withMaxIterations(5) // 最多 5 次
                 .addNode("loop", state -> state)
                 .addEdge(Graph.START, "loop")
-                .addEdge("loop", "loop")  // 死循环
+                .addEdge("loop", "loop") // 死循环
                 .compile();
 
         assertThrows(GraphException.class, () -> app.invoke(new MapAgentState()));

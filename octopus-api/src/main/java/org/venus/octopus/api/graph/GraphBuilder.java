@@ -1,8 +1,7 @@
 package org.venus.octopus.api.graph;
 
-import org.venus.octopus.api.agent.AgentState;
-
 import java.util.Map;
+import org.venus.octopus.api.agent.AgentState;
 
 /**
  * 图构建器接口

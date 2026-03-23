@@ -1,5 +1,7 @@
 package org.venus.octopus.core.runner;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.venus.octopus.api.agent.AgentState;
@@ -10,9 +12,6 @@ import org.venus.octopus.common.exception.NodeException;
 import org.venus.octopus.core.graph.GraphDefinition;
 import org.venus.octopus.core.graph.GraphEdge;
 import org.venus.octopus.core.graph.GraphNode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 图运行引擎
@@ -78,8 +77,7 @@ public class GraphRunner<S extends AgentState> {
         int iteration = 0;
         while (!Graph.END.equals(currentNodeName)) {
             if (iteration++ >= maxIterations) {
-                throw new GraphException(
-                        "图执行超过最大迭代次数 " + maxIterations + "，可能存在无限循环。"
+                throw new GraphException("图执行超过最大迭代次数 " + maxIterations + "，可能存在无限循环。"
                         + "如需更多迭代，请调用 StateGraph.withMaxIterations(n) 设置更大的值。");
             }
 
@@ -115,8 +113,7 @@ public class GraphRunner<S extends AgentState> {
         List<GraphEdge<S>> edges = definition.getEdgesFrom(currentNodeName);
         if (edges.isEmpty()) {
             throw new GraphException(
-                    "节点 '" + currentNodeName + "' 没有定义出边，图执行无法继续。"
-                    + "请检查是否遗漏了 addEdge 或 addConditionalEdges 调用。");
+                    "节点 '" + currentNodeName + "' 没有定义出边，图执行无法继续。" + "请检查是否遗漏了 addEdge 或 addConditionalEdges 调用。");
         }
         // 目前每个节点只支持一条出边（直接边或条件边）
         GraphEdge<S> edge = edges.get(0);

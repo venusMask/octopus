@@ -1,8 +1,7 @@
 package org.venus.octopus.core.state;
 
-import org.venus.octopus.api.agent.AgentState;
-
 import java.util.*;
+import org.venus.octopus.api.agent.AgentState;
 
 /**
  * 基于 HashMap 的 AgentState 实现

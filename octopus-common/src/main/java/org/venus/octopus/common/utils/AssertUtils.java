@@ -1,9 +1,8 @@
 package org.venus.octopus.common.utils;
 
-import org.venus.octopus.common.exception.OctopusException;
-
 import java.util.Collection;
 import java.util.Map;
+import org.venus.octopus.common.exception.OctopusException;
 
 /**
  * 参数断言工具类

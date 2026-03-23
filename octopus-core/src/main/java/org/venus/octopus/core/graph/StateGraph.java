@@ -1,13 +1,12 @@
 package org.venus.octopus.core.graph;
 
+import java.util.Map;
+import java.util.function.Supplier;
 import org.venus.octopus.api.agent.AgentState;
 import org.venus.octopus.api.graph.*;
 import org.venus.octopus.common.exception.GraphException;
 import org.venus.octopus.common.utils.AssertUtils;
 import org.venus.octopus.core.runner.GraphRunner;
-
-import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * 图构建器（核心入口 API）
@@ -85,8 +84,7 @@ public class StateGraph<S extends AgentState> implements GraphBuilder<S> {
     }
 
     @Override
-    public StateGraph<S> addConditionalEdges(
-            String source, EdgeCondition<S> condition, Map<String, String> pathMap) {
+    public StateGraph<S> addConditionalEdges(String source, EdgeCondition<S> condition, Map<String, String> pathMap) {
         AssertUtils.notEmpty(source, "条件边的 source 不能为空");
         AssertUtils.notNull(condition, "路由函数不能为 null");
         AssertUtils.notEmpty(pathMap, "路径映射不能为空");

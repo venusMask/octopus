@@ -1,10 +1,9 @@
 package org.venus.octopus.core.graph;
 
+import java.util.*;
 import org.venus.octopus.api.agent.AgentState;
 import org.venus.octopus.api.graph.Graph;
 import org.venus.octopus.common.exception.GraphException;
-
-import java.util.*;
 
 /**
  * 图结构定义（图的只读结构描述）

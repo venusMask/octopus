@@ -1,9 +1,8 @@
 package org.venus.octopus.core.graph;
 
+import java.util.Map;
 import org.venus.octopus.api.agent.AgentState;
 import org.venus.octopus.api.graph.EdgeCondition;
-
-import java.util.Map;
 
 /**
  * 图的边描述类
@@ -88,8 +87,7 @@ public class GraphEdge<S extends AgentState> {
         String routeKey = condition.route(state);
         String next = pathMap.get(routeKey);
         if (next == null) {
-            throw new IllegalStateException(
-                    "条件边路由键 '" + routeKey + "' 在路径映射中未找到，可用键: " + pathMap.keySet());
+            throw new IllegalStateException("条件边路由键 '" + routeKey + "' 在路径映射中未找到，可用键: " + pathMap.keySet());
         }
         return next;
     }
