@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.venus.octopus.api.llm.ChatModel;
 import org.venus.octopus.api.llm.ChatOptions;
+import org.venus.octopus.api.llm.ChatRequest;
 import org.venus.octopus.api.llm.ChatResponse;
 import org.venus.octopus.api.llm.TokenUsage;
 import org.venus.octopus.api.message.*;
@@ -45,7 +46,11 @@ public class OpenAiChatModel implements ChatModel {
     }
 
     @Override
-    public ChatResponse generate(List<Message> messages, ChatOptions options, List<ToolSpec> tools) {
+    public ChatResponse call(ChatRequest request) {
+        List<Message> messages = request.getMessages();
+        ChatOptions options = request.getOptions();
+        List<ToolSpec> tools = request.getTools();
+
         String endpoint = baseUrl + "chat/completions";
 
         ObjectNode requestBody = MAPPER.createObjectNode();
@@ -130,11 +135,11 @@ public class OpenAiChatModel implements ChatModel {
             String jsonPayload = MAPPER.writeValueAsString(requestBody);
             log.debug("Sending request to LLM ({}): {}", model, jsonPayload);
 
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+            HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(endpoint))
                     .header("Content-Type", "application/json").header("Authorization", "Bearer " + apiKey)
                     .POST(HttpRequest.BodyPublishers.ofString(jsonPayload)).build();
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 400) {
                 log.error("LLM API Error: {}", response.body());
