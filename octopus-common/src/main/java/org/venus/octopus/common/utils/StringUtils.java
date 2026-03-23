@@ -5,7 +5,8 @@ package org.venus.octopus.common.utils;
  */
 public final class StringUtils {
 
-    private StringUtils() {}
+    private StringUtils() {
+    }
 
     /**
      * 判断字符串是否为 null 或空字符串
@@ -38,8 +39,10 @@ public final class StringUtils {
     /**
      * 截断字符串到指定长度，超出部分追加省略号
      *
-     * @param str    原始字符串
-     * @param maxLen 最大长度
+     * @param str
+     *            原始字符串
+     * @param maxLen
+     *            最大长度
      * @return 截断后的字符串
      */
     public static String truncate(String str, int maxLen) {

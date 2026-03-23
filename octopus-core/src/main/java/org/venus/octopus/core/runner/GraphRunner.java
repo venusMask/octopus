@@ -17,6 +17,7 @@ import org.venus.octopus.core.graph.GraphNode;
  * 图运行引擎
  * <p>
  * 实现图的状态机循环执行逻辑：
+ * 
  * <pre>
  *   START → node_A → node_B → ... → END
  *                   ↑       ↓ (条件边)
@@ -25,15 +26,16 @@ import org.venus.octopus.core.graph.GraphNode;
  *
  * 执行算法：
  * <ol>
- *   <li>从入口边（START 出发的边）确定第一个节点</li>
- *   <li>执行当前节点，获取更新后的状态</li>
- *   <li>根据当前节点的出边（直接边或条件边）确定下一个节点</li>
- *   <li>若下一个节点为 END，停止循环并返回最终状态</li>
- *   <li>若迭代次数超过上限，抛出异常防止无限循环</li>
+ * <li>从入口边（START 出发的边）确定第一个节点</li>
+ * <li>执行当前节点，获取更新后的状态</li>
+ * <li>根据当前节点的出边（直接边或条件边）确定下一个节点</li>
+ * <li>若下一个节点为 END，停止循环并返回最终状态</li>
+ * <li>若迭代次数超过上限，抛出异常防止无限循环</li>
  * </ol>
  * </p>
  *
- * @param <S> AgentState 类型
+ * @param <S>
+ *            AgentState 类型
  */
 public class GraphRunner<S extends AgentState> {
 
@@ -50,7 +52,8 @@ public class GraphRunner<S extends AgentState> {
     /**
      * 同步执行图，返回最终状态
      *
-     * @param initialState 初始状态
+     * @param initialState
+     *            初始状态
      * @return 最终状态
      */
     public S run(S initialState) {
@@ -64,7 +67,8 @@ public class GraphRunner<S extends AgentState> {
     /**
      * 执行图，返回所有节点的输出列表（用于流式场景）
      *
-     * @param initialState 初始状态
+     * @param initialState
+     *            初始状态
      * @return 各节点输出列表
      */
     public List<CompiledGraph.NodeOutput<S>> runWithOutputs(S initialState) {

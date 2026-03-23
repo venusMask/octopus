@@ -10,13 +10,13 @@ import java.util.List;
  * 描述工具的元数据，用于向 LLM 生成 function calling 配置（JSON Schema 风格）。
  * </p>
  *
- * <p>使用示例：</p>
+ * <p>
+ * 使用示例：
+ * </p>
+ * 
  * <pre>{@code
- * ToolSpec spec = ToolSpec.builder()
- *     .name("web_search")
- *     .description("搜索互联网获取最新信息")
- *     .parameter("query", "string", "搜索关键词", true)
- *     .build();
+ * ToolSpec spec = ToolSpec.builder().name("web_search").description("搜索互联网获取最新信息")
+ *         .parameter("query", "string", "搜索关键词", true).build();
  * }</pre>
  */
 public class ToolSpec {
@@ -50,12 +50,17 @@ public class ToolSpec {
     /**
      * 工具参数规格
      *
-     * @param name        参数名称
-     * @param type        参数类型（"string"/"number"/"boolean"/"object"/"array"）
-     * @param description 参数描述
-     * @param required    是否必填
+     * @param name
+     *            参数名称
+     * @param type
+     *            参数类型（"string"/"number"/"boolean"/"object"/"array"）
+     * @param description
+     *            参数描述
+     * @param required
+     *            是否必填
      */
-    public record ParameterSpec(String name, String type, String description, boolean required) {}
+    public record ParameterSpec(String name, String type, String description, boolean required) {
+    }
 
     /**
      * ToolSpec 构建器

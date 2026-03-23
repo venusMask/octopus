@@ -23,14 +23,10 @@ class StateGraphTest {
 
     @Test
     void testSingleNode_shouldExecuteAndReturnState() {
-        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .addNode("greet", state -> {
-                    state.put("result", "hello " + state.get("name"));
-                    return state;
-                })
-                .addEdge(Graph.START, "greet")
-                .addEdge("greet", Graph.END)
-                .compile();
+        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new).addNode("greet", state -> {
+            state.put("result", "hello " + state.get("name"));
+            return state;
+        }).addEdge(Graph.START, "greet").addEdge("greet", Graph.END).compile();
 
         MapAgentState initial = MapAgentState.of("name", "octopus");
         MapAgentState result = app.invoke(initial);
@@ -46,22 +42,16 @@ class StateGraphTest {
     void testMultiNodeChain_shouldExecuteInOrder() {
         List<String> executionOrder = new ArrayList<>();
 
-        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .addNode("step1", state -> {
-                    executionOrder.add("step1");
-                    state.put("value", 1);
-                    return state;
-                })
-                .addNode("step2", state -> {
-                    executionOrder.add("step2");
-                    int v = (int) state.get("value");
-                    state.put("value", v + 10);
-                    return state;
-                })
-                .addEdge(Graph.START, "step1")
-                .addEdge("step1", "step2")
-                .addEdge("step2", Graph.END)
-                .compile();
+        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new).addNode("step1", state -> {
+            executionOrder.add("step1");
+            state.put("value", 1);
+            return state;
+        }).addNode("step2", state -> {
+            executionOrder.add("step2");
+            int v = (int) state.get("value");
+            state.put("value", v + 10);
+            return state;
+        }).addEdge(Graph.START, "step1").addEdge("step1", "step2").addEdge("step2", Graph.END).compile();
 
         MapAgentState result = app.invoke(new MapAgentState());
 
@@ -75,22 +65,17 @@ class StateGraphTest {
 
     @Test
     void testConditionalEdge_shouldRouteToCorrectNode() {
-        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .addNode("router", state -> state) // 不修改状态
+        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new).addNode("router", state -> state) // 不修改状态
                 .addNode("pathA", state -> {
                     state.put("path", "A");
                     return state;
-                })
-                .addNode("pathB", state -> {
+                }).addNode("pathB", state -> {
                     state.put("path", "B");
                     return state;
-                })
-                .addEdge(Graph.START, "router")
-                .addConditionalEdges(
-                        "router", state -> (String) state.get("direction"), Map.of("A", "pathA", "B", "pathB"))
-                .addEdge("pathA", Graph.END)
-                .addEdge("pathB", Graph.END)
-                .compile();
+                }).addEdge(Graph.START, "router")
+                .addConditionalEdges("router", state -> (String) state.get("direction"),
+                        Map.of("A", "pathA", "B", "pathB"))
+                .addEdge("pathA", Graph.END).addEdge("pathB", Graph.END).compile();
 
         // 路由到 pathA
         MapAgentState stateA = MapAgentState.of("direction", "A");
@@ -107,22 +92,15 @@ class StateGraphTest {
 
     @Test
     void testStream_shouldReturnOutputForEachNode() {
-        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .addNode("nodeA", state -> {
-                    state.put("a", 1);
-                    return state;
-                })
-                .addNode("nodeB", state -> {
-                    state.put("b", 2);
-                    return state;
-                })
-                .addEdge(Graph.START, "nodeA")
-                .addEdge("nodeA", "nodeB")
-                .addEdge("nodeB", Graph.END)
-                .compile();
+        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new).addNode("nodeA", state -> {
+            state.put("a", 1);
+            return state;
+        }).addNode("nodeB", state -> {
+            state.put("b", 2);
+            return state;
+        }).addEdge(Graph.START, "nodeA").addEdge("nodeA", "nodeB").addEdge("nodeB", Graph.END).compile();
 
-        List<String> nodeNames = app.stream(new MapAgentState())
-                .map(CompiledGraph.NodeOutput::nodeName)
+        List<String> nodeNames = app.stream(new MapAgentState()).map(CompiledGraph.NodeOutput::nodeName)
                 .collect(Collectors.toList());
 
         assertEquals(List.of("nodeA", "nodeB"), nodeNames);
@@ -135,23 +113,17 @@ class StateGraphTest {
     @Test
     void testCyclicGraph_reactPattern() {
         // 模拟：agent决定是否用工具；工具用完回到agent；agent第二次决定结束
-        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .addNode("agent", state -> {
-                    int count = state.containsKey("count") ? (int) state.get("count") : 0;
-                    state.put("count", count + 1);
-                    // 第一次调工具，第二次结束
-                    state.put("next", count >= 1 ? "end" : "tools");
-                    return state;
-                })
-                .addNode("tools", state -> {
-                    state.put("toolResult", "done");
-                    return state;
-                })
-                .addEdge(Graph.START, "agent")
-                .addConditionalEdges(
-                        "agent", state -> (String) state.get("next"), Map.of("tools", "tools", "end", Graph.END))
-                .addEdge("tools", "agent")
-                .compile();
+        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new).addNode("agent", state -> {
+            int count = state.containsKey("count") ? (int) state.get("count") : 0;
+            state.put("count", count + 1);
+            // 第一次调工具，第二次结束
+            state.put("next", count >= 1 ? "end" : "tools");
+            return state;
+        }).addNode("tools", state -> {
+            state.put("toolResult", "done");
+            return state;
+        }).addEdge(Graph.START, "agent").addConditionalEdges("agent", state -> (String) state.get("next"),
+                Map.of("tools", "tools", "end", Graph.END)).addEdge("tools", "agent").compile();
 
         MapAgentState result = app.invoke(new MapAgentState());
 
@@ -190,11 +162,8 @@ class StateGraphTest {
     @Test
     void testMaxIterationsExceeded_shouldThrowGraphException() {
         // 构建一个无终止条件的循环图
-        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
-                .withMaxIterations(5) // 最多 5 次
-                .addNode("loop", state -> state)
-                .addEdge(Graph.START, "loop")
-                .addEdge("loop", "loop") // 死循环
+        CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new).withMaxIterations(5) // 最多 5 次
+                .addNode("loop", state -> state).addEdge(Graph.START, "loop").addEdge("loop", "loop") // 死循环
                 .compile();
 
         assertThrows(GraphException.class, () -> app.invoke(new MapAgentState()));

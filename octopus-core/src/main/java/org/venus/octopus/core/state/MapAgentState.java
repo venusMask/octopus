@@ -6,8 +6,7 @@ import org.venus.octopus.api.agent.AgentState;
 /**
  * 基于 HashMap 的 AgentState 实现
  * <p>
- * 提供线程不安全的简单状态存储，适用于单线程图执行场景。
- * 如需线程安全，可替换底层 Map 为 ConcurrentHashMap。
+ * 提供线程不安全的简单状态存储，适用于单线程图执行场景。 如需线程安全，可替换底层 Map 为 ConcurrentHashMap。
  * </p>
  */
 public class MapAgentState implements AgentState {

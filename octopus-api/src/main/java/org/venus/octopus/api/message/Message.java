@@ -4,7 +4,9 @@ import java.util.Map;
 
 /**
  * 消息顶层接口
- * <p>代表 Agent 与用户、工具或 AI 模型之间交换的单条消息。</p>
+ * <p>
+ * 代表 Agent 与用户、工具或 AI 模型之间交换的单条消息。
+ * </p>
  */
 public interface Message {
 

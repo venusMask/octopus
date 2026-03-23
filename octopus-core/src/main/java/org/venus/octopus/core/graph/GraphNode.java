@@ -5,9 +5,12 @@ import org.venus.octopus.api.graph.Node;
 
 /**
  * 图的节点内部包装类
- * <p>持有节点名称和执行逻辑。</p>
+ * <p>
+ * 持有节点名称和执行逻辑。
+ * </p>
  *
- * @param <S> AgentState 类型
+ * @param <S>
+ *            AgentState 类型
  */
 public class GraphNode<S extends AgentState> {
 

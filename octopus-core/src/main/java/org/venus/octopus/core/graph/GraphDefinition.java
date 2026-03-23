@@ -8,11 +8,12 @@ import org.venus.octopus.common.exception.GraphException;
 /**
  * 图结构定义（图的只读结构描述）
  * <p>
- * 存储图的节点表和边表，是 StateGraph 构建后的中间产物，
- * 由 {@link StateGraph#compile()} 生成后交给 CompiledGraphImpl 使用。
+ * 存储图的节点表和边表，是 StateGraph 构建后的中间产物， 由 {@link StateGraph#compile()} 生成后交给
+ * CompiledGraphImpl 使用。
  * </p>
  *
- * @param <S> AgentState 类型
+ * @param <S>
+ *            AgentState 类型
  */
 public class GraphDefinition<S extends AgentState> {
 
@@ -83,7 +84,8 @@ public class GraphDefinition<S extends AgentState> {
     /**
      * 获取指定节点的下一条边
      *
-     * @param nodeName 节点名称
+     * @param nodeName
+     *            节点名称
      * @return 边列表（可能为空或只有一条）
      */
     public List<GraphEdge<S>> getEdgesFrom(String nodeName) {

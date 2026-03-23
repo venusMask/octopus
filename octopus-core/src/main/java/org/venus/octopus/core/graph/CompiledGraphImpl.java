@@ -9,11 +9,12 @@ import org.venus.octopus.core.runner.GraphRunner;
 /**
  * 已编译图的具体实现
  * <p>
- * 持有图结构定义 {@link GraphDefinition} 和运行器 {@link GraphRunner}，
- * 提供 {@link #invoke} 和 {@link #stream} 两种执行模式。
+ * 持有图结构定义 {@link GraphDefinition} 和运行器 {@link GraphRunner}， 提供 {@link #invoke}
+ * 和 {@link #stream} 两种执行模式。
  * </p>
  *
- * @param <S> AgentState 类型
+ * @param <S>
+ *            AgentState 类型
  */
 public class CompiledGraphImpl<S extends AgentState> implements CompiledGraph<S> {
 
@@ -28,7 +29,8 @@ public class CompiledGraphImpl<S extends AgentState> implements CompiledGraph<S>
     /**
      * 同步执行图，阻塞直到结束
      *
-     * @param initialState 初始状态
+     * @param initialState
+     *            初始状态
      * @return 最终状态
      */
     @Override
@@ -39,7 +41,8 @@ public class CompiledGraphImpl<S extends AgentState> implements CompiledGraph<S>
     /**
      * 流式执行图，逐节点返回中间状态
      *
-     * @param initialState 初始状态
+     * @param initialState
+     *            初始状态
      * @return 节点输出流
      */
     @Override

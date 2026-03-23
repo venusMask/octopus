@@ -11,26 +11,25 @@ import org.venus.octopus.core.runner.GraphRunner;
 /**
  * 图构建器（核心入口 API）
  * <p>
- * 类比 LangGraph 的 {@code StateGraph}，提供流式 API 来定义图的节点和边，
- * 最终通过 {@link #compile()} 生成可执行的 {@link CompiledGraph}。
+ * 类比 LangGraph 的 {@code StateGraph}，提供流式 API 来定义图的节点和边， 最终通过 {@link #compile()}
+ * 生成可执行的 {@link CompiledGraph}。
  * </p>
  *
- * <p>典型用法：</p>
+ * <p>
+ * 典型用法：
+ * </p>
+ * 
  * <pre>{@code
- * CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new)
- *     .addNode("agent", state -> agentNode(state))
- *     .addNode("tools", state -> toolsNode(state))
- *     .addEdge(Graph.START, "agent")
- *     .addConditionalEdges("agent",
- *         state -> shouldContinue(state) ? "tools" : "end",
- *         Map.of("tools", "tools", "end", Graph.END))
- *     .addEdge("tools", "agent")
- *     .compile();
+ * CompiledGraph<MapAgentState> app = new StateGraph<>(MapAgentState::new).addNode("agent", state -> agentNode(state))
+ *         .addNode("tools", state -> toolsNode(state)).addEdge(Graph.START, "agent").addConditionalEdges("agent",
+ *                 state -> shouldContinue(state) ? "tools" : "end", Map.of("tools", "tools", "end", Graph.END))
+ *         .addEdge("tools", "agent").compile();
  *
  * MapAgentState result = app.invoke(initialState);
  * }</pre>
  *
- * @param <S> AgentState 的具体类型
+ * @param <S>
+ *            AgentState 的具体类型
  */
 public class StateGraph<S extends AgentState> implements GraphBuilder<S> {
 
@@ -44,7 +43,8 @@ public class StateGraph<S extends AgentState> implements GraphBuilder<S> {
     /**
      * 创建 StateGraph
      *
-     * @param stateFactory 状态工厂函数，用于创建初始状态副本
+     * @param stateFactory
+     *            状态工厂函数，用于创建初始状态副本
      */
     public StateGraph(Supplier<S> stateFactory) {
         AssertUtils.notNull(stateFactory, "stateFactory 不能为 null");
@@ -55,7 +55,8 @@ public class StateGraph<S extends AgentState> implements GraphBuilder<S> {
     /**
      * 设置最大迭代次数（防止图无限循环）
      *
-     * @param maxIterations 最大次数，默认 100
+     * @param maxIterations
+     *            最大次数，默认 100
      * @return 当前构建器
      */
     public StateGraph<S> withMaxIterations(int maxIterations) {

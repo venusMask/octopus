@@ -9,7 +9,8 @@ import java.util.Optional;
  */
 public final class CollectionUtils {
 
-    private CollectionUtils() {}
+    private CollectionUtils() {
+    }
 
     /**
      * 判断集合是否为 null 或空

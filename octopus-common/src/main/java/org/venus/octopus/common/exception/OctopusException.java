@@ -2,7 +2,9 @@ package org.venus.octopus.common.exception;
 
 /**
  * Octopus 框架基础运行时异常
- * <p>所有框架内部异常均继承自本类，便于统一捕获处理。</p>
+ * <p>
+ * 所有框架内部异常均继承自本类，便于统一捕获处理。
+ * </p>
  */
 public class OctopusException extends RuntimeException {
 

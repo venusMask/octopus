@@ -6,7 +6,9 @@ import java.util.Map;
 
 /**
  * 消息抽象基类
- * <p>提供消息内容和元数据的默认实现。</p>
+ * <p>
+ * 提供消息内容和元数据的默认实现。
+ * </p>
  */
 public abstract class BaseMessage implements Message {
 

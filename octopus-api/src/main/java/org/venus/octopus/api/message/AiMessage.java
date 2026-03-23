@@ -5,7 +5,9 @@ import java.util.Map;
 
 /**
  * AI 模型回复消息
- * <p>支持携带工具调用请求列表（用于 function calling）。</p>
+ * <p>
+ * 支持携带工具调用请求列表（用于 function calling）。
+ * </p>
  */
 public class AiMessage extends BaseMessage {
 
@@ -41,5 +43,6 @@ public class AiMessage extends BaseMessage {
     /**
      * 工具调用请求
      */
-    public record ToolCall(String id, String toolName, Map<String, Object> arguments) {}
+    public record ToolCall(String id, String toolName, Map<String, Object> arguments) {
+    }
 }

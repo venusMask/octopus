@@ -6,9 +6,12 @@ import org.venus.octopus.api.graph.EdgeCondition;
 
 /**
  * 图的边描述类
- * <p>区分直接边（Direct）和条件边（Conditional）。</p>
+ * <p>
+ * 区分直接边（Direct）和条件边（Conditional）。
+ * </p>
  *
- * @param <S> AgentState 类型
+ * @param <S>
+ *            AgentState 类型
  */
 public class GraphEdge<S extends AgentState> {
 
@@ -36,8 +39,8 @@ public class GraphEdge<S extends AgentState> {
     }
 
     /** 构造条件边 */
-    public static <S extends AgentState> GraphEdge<S> conditional(
-            String source, EdgeCondition<S> condition, Map<String, String> pathMap) {
+    public static <S extends AgentState> GraphEdge<S> conditional(String source, EdgeCondition<S> condition,
+            Map<String, String> pathMap) {
         return new GraphEdge<>(source, condition, pathMap);
     }
 
@@ -76,7 +79,8 @@ public class GraphEdge<S extends AgentState> {
     /**
      * 根据当前状态解析下一个节点名称
      *
-     * @param state 当前状态
+     * @param state
+     *            当前状态
      * @return 下一个节点名称
      */
     public String resolveNext(S state) {

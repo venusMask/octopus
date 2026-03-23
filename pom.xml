@@ -88,10 +88,10 @@
         <version>2.43.0</version>
         <configuration>
           <java>
-            <!-- 使用 Palantir Java Format (4个空格缩进，标准Java风格) -->
-            <palantirJavaFormat>
-              <version>2.39.0</version>
-            </palantirJavaFormat>
+            <!-- 暴露出配置文件形式，基于 Eclipse 引擎进行任意深度定制 -->
+            <eclipse>
+              <file>${maven.multiModuleProjectDirectory}/eclipse-formatter.xml</file>
+            </eclipse>
             <removeUnusedImports></removeUnusedImports>
             <formatAnnotations></formatAnnotations>
           </java>

@@ -15,7 +15,8 @@ package org.venus.octopus.api.agent;
  * };
  * }</pre>
  *
- * @param <T> 值类型
+ * @param <T>
+ *            值类型
  */
 @FunctionalInterface
 public interface StateReducer<T> {
@@ -23,8 +24,10 @@ public interface StateReducer<T> {
     /**
      * 合并两个值
      *
-     * @param existing 当前已有的值
-     * @param newValue 新到来的值
+     * @param existing
+     *            当前已有的值
+     * @param newValue
+     *            新到来的值
      * @return 合并后的值
      */
     T reduce(T existing, T newValue);
