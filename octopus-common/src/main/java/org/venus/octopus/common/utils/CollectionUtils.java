@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 集合工具类
+ * Collection utility class.
  */
 public final class CollectionUtils {
 
@@ -13,21 +13,21 @@ public final class CollectionUtils {
     }
 
     /**
-     * 判断集合是否为 null 或空
+     * Checks if the collection is null or empty.
      */
     public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }
 
     /**
-     * 判断集合是否非空
+     * Checks if the collection is not empty.
      */
     public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
     }
 
     /**
-     * 获取集合中的第一个元素，不存在则返回 null
+     * Gets the first element in the collection, or null if it does not exist.
      */
     public static <T> T firstOrNull(List<T> list) {
         if (isEmpty(list)) {
@@ -37,7 +37,7 @@ public final class CollectionUtils {
     }
 
     /**
-     * 获取集合中的最后一个元素，不存在则返回 null
+     * Gets the last element in the collection, or null if it does not exist.
      */
     public static <T> T lastOrNull(List<T> list) {
         if (isEmpty(list)) {
@@ -47,7 +47,7 @@ public final class CollectionUtils {
     }
 
     /**
-     * 安全地获取集合中的第一个元素
+     * Safely gets the first element in the collection.
      */
     public static <T> Optional<T> first(List<T> list) {
         if (isEmpty(list)) {

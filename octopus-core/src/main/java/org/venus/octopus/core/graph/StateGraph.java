@@ -9,14 +9,15 @@ import org.venus.octopus.common.utils.AssertUtils;
 import org.venus.octopus.core.runner.GraphRunner;
 
 /**
- * 图构建器（核心入口 API）
+ * Graph builder (core entry point API).
  * <p>
- * 类比 LangGraph 的 {@code StateGraph}，提供流式 API 来定义图的节点和边， 最终通过 {@link #compile()}
- * 生成可执行的 {@link CompiledGraph}。
+ * Analogous to LangGraph's {@code StateGraph}, provides a fluent API for
+ * defining graph nodes and edges, finally generating an executable
+ * {@link CompiledGraph} via {@link #compile()}.
  * </p>
  *
  * <p>
- * 典型用法：
+ * Typical usage:
  * </p>
  * 
  * <pre>{@code
@@ -29,11 +30,11 @@ import org.venus.octopus.core.runner.GraphRunner;
  * }</pre>
  *
  * @param <S>
- *            AgentState 的具体类型
+ *            The specific type of AgentState
  */
 public class StateGraph<S extends AgentState> implements GraphBuilder<S> {
 
-    /** 最大递归（循环）次数，防止无限循环 */
+    /** Maximum recursion (loop) count to prevent infinite loops */
     private static final int DEFAULT_MAX_ITERATIONS = 100;
 
     private final GraphDefinition<S> definition;
@@ -41,36 +42,37 @@ public class StateGraph<S extends AgentState> implements GraphBuilder<S> {
     private int maxIterations = DEFAULT_MAX_ITERATIONS;
 
     /**
-     * 创建 StateGraph
+     * Creates a StateGraph.
      *
      * @param stateFactory
-     *            状态工厂函数，用于创建初始状态副本
+     *            State factory function, used to create initial state copies
      */
     public StateGraph(Supplier<S> stateFactory) {
-        AssertUtils.notNull(stateFactory, "stateFactory 不能为 null");
+        AssertUtils.notNull(stateFactory, "stateFactory cannot be null");
         this.stateFactory = stateFactory;
         this.definition = new GraphDefinition<>();
     }
 
     /**
-     * 设置最大迭代次数（防止图无限循环）
+     * Sets the maximum number of iterations (to prevent infinite loops in the
+     * graph).
      *
      * @param maxIterations
-     *            最大次数，默认 100
-     * @return 当前构建器
+     *            Maximum count, defaults to 100
+     * @return The current builder
      */
     public StateGraph<S> withMaxIterations(int maxIterations) {
-        AssertUtils.isTrue(maxIterations > 0, "maxIterations 必须大于 0");
+        AssertUtils.isTrue(maxIterations > 0, "maxIterations must be greater than 0");
         this.maxIterations = maxIterations;
         return this;
     }
 
     @Override
     public StateGraph<S> addNode(String name, Node<S> node) {
-        AssertUtils.notEmpty(name, "节点名称不能为空");
-        AssertUtils.notNull(node, "节点逻辑不能为 null");
+        AssertUtils.notEmpty(name, "Node name cannot be empty");
+        AssertUtils.notNull(node, "Node logic cannot be null");
         if (Graph.START.equals(name) || Graph.END.equals(name)) {
-            throw new GraphException("'" + name + "' 是保留节点名称，不能作为普通节点");
+            throw new GraphException("'" + name + "' is a reserved node name and cannot be used for a normal node");
         }
         definition.registerNode(new GraphNode<>(name, node));
         return this;
@@ -78,17 +80,17 @@ public class StateGraph<S extends AgentState> implements GraphBuilder<S> {
 
     @Override
     public StateGraph<S> addEdge(String source, String target) {
-        AssertUtils.notEmpty(source, "边的 source 不能为空");
-        AssertUtils.notEmpty(target, "边的 target 不能为空");
+        AssertUtils.notEmpty(source, "Edge source cannot be empty");
+        AssertUtils.notEmpty(target, "Edge target cannot be empty");
         definition.registerEdge(GraphEdge.direct(source, target));
         return this;
     }
 
     @Override
     public StateGraph<S> addConditionalEdges(String source, EdgeCondition<S> condition, Map<String, String> pathMap) {
-        AssertUtils.notEmpty(source, "条件边的 source 不能为空");
-        AssertUtils.notNull(condition, "路由函数不能为 null");
-        AssertUtils.notEmpty(pathMap, "路径映射不能为空");
+        AssertUtils.notEmpty(source, "Conditional edge source cannot be empty");
+        AssertUtils.notNull(condition, "Routing function cannot be null");
+        AssertUtils.notEmpty(pathMap, "Path map cannot be empty");
         definition.registerEdge(GraphEdge.conditional(source, condition, pathMap));
         return this;
     }

@@ -4,13 +4,13 @@ import org.venus.octopus.api.agent.AgentState;
 import org.venus.octopus.api.graph.Node;
 
 /**
- * 图的节点内部包装类
+ * Internal node wrapper class for the graph.
  * <p>
- * 持有节点名称和执行逻辑。
+ * Holds the node name and execution logic.
  * </p>
  *
  * @param <S>
- *            AgentState 类型
+ *            AgentState type
  */
 public class GraphNode<S extends AgentState> {
 

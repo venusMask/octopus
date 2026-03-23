@@ -5,48 +5,52 @@ import org.venus.octopus.api.message.Message;
 import java.util.List;
 
 /**
- * 会话上下文记忆接口
+ * Chat session context memory interface.
  * <p>
- * 提供长期或短期的多轮对话上下文管理能力，以 sessionId 作为区分用户的标识。 可用于普通的 LLM 连续对话，也可作为 Agent
- * 执行过程中的重要知识补充层。
+ * Provides long-term or short-term multi-turn conversation context management
+ * capabilities, using sessionId as a unique identifier for users. It can be
+ * used for normal LLM continuous conversations or as an important knowledge
+ * supplement layer during Agent execution.
  * </p>
  */
 public interface ChatMemory {
 
     /**
-     * 追加多条消息到指定会话
+     * Appends multiple messages to a specified session.
      *
      * @param sessionId
-     *            会话的唯一标识
+     *            Unique identifier for the session
      * @param messages
-     *            需要追缴的消息列表
+     *            List of messages to append
      */
     void add(String sessionId, List<Message> messages);
 
     /**
-     * 追加单条消息到指定会话
+     * Appends a single message to a specified session.
      *
      * @param sessionId
-     *            会话的唯一标识
+     *            Unique identifier for the session
      * @param message
-     *            单条新增消息
+     *            A single new message
      */
     void add(String sessionId, Message message);
 
     /**
-     * 获取指定会话的所有历史消息（受特定实现类内部的截断淘汰策略控制）
+     * Gets all historical messages for a specified session (controlled by
+     * truncation/eviction policies internal to the specific implementation).
      *
      * @param sessionId
-     *            会话标识
-     * @return 历史消息的不可变列表或安全副本，如果从不存在则返回空列表
+     *            Session identifier
+     * @return An immutable list or a safe copy of historical messages, or an empty
+     *         list if none exist
      */
     List<Message> get(String sessionId);
 
     /**
-     * 清除指定会话的所有内容
+     * Clears all content for a specified session.
      *
      * @param sessionId
-     *            会话标识
+     *            Session identifier
      */
     void clear(String sessionId);
 }

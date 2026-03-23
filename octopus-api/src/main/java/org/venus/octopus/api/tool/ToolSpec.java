@@ -5,18 +5,19 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 工具规格描述
+ * Tool specification description.
  * <p>
- * 描述工具的元数据，用于向 LLM 生成 function calling 配置（JSON Schema 风格）。
+ * Describes the tool's metadata, used to generate function calling
+ * configuration (JSON Schema style) for LLMs.
  * </p>
  *
  * <p>
- * 使用示例：
+ * Usage example:
  * </p>
- * 
+ *
  * <pre>{@code
- * ToolSpec spec = ToolSpec.builder().name("web_search").description("搜索互联网获取最新信息")
- *         .parameter("query", "string", "搜索关键词", true).build();
+ * ToolSpec spec = ToolSpec.builder().name("web_search").description("Search the internet for the latest information")
+ *         .parameter("query", "string", "Search keywords", true).build();
  * }</pre>
  */
 public class ToolSpec {
@@ -48,22 +49,23 @@ public class ToolSpec {
     }
 
     /**
-     * 工具参数规格
+     * Tool parameter specification.
      *
      * @param name
-     *            参数名称
+     *            Name of the parameter
      * @param type
-     *            参数类型（"string"/"number"/"boolean"/"object"/"array"）
+     *            Type of the parameter
+     *            ("string"/"number"/"boolean"/"object"/"array")
      * @param description
-     *            参数描述
+     *            Description of the parameter
      * @param required
-     *            是否必填
+     *            Whether the parameter is required
      */
     public record ParameterSpec(String name, String type, String description, boolean required) {
     }
 
     /**
-     * ToolSpec 构建器
+     * ToolSpec builder.
      */
     public static class Builder {
         private String name;
@@ -87,7 +89,7 @@ public class ToolSpec {
 
         public ToolSpec build() {
             if (name == null || name.isBlank()) {
-                throw new IllegalArgumentException("ToolSpec 的 name 不能为空");
+                throw new IllegalArgumentException("ToolSpec name cannot be null or empty");
             }
             return new ToolSpec(this);
         }

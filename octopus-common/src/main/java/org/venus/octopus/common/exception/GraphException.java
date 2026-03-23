@@ -1,7 +1,7 @@
 package org.venus.octopus.common.exception;
 
 /**
- * 图构建或执行过程中的异常
+ * Exception during graph construction or execution.
  */
 public class GraphException extends OctopusException {
 

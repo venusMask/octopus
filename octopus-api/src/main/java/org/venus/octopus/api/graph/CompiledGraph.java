@@ -4,52 +4,56 @@ import java.util.stream.Stream;
 import org.venus.octopus.api.agent.AgentState;
 
 /**
- * 已编译图接口
+ * Compiled graph interface.
  * <p>
- * 通过 {@link GraphBuilder#compile()} 生成，持有图的完整结构定义和运行器。 提供两种执行模式：
+ * Generated via {@link GraphBuilder#compile()}, holding the complete graph
+ * structure definition and runner. Provides two execution modes:
  * <ul>
- * <li>{@link #invoke} — 同步执行，阻塞直到图运行结束，返回最终状态</li>
- * <li>{@link #stream} — 流式执行，逐节点返回中间状态，适合实时观测</li>
+ * <li>{@link #invoke} — Synchronous execution, blocking until the graph
+ * finishes, returning the final state</li>
+ * <li>{@link #stream} — Streaming execution, returning intermediate states
+ * node-by-node, suitable for real-time observation</li>
  * </ul>
  * </p>
  *
  * @param <S>
- *            AgentState 的具体类型
+ *            The concrete type of AgentState
  */
 public interface CompiledGraph<S extends AgentState> {
 
     /**
-     * 同步执行图，返回最终状态
+     * Synchronously executes the graph, returning the final state.
      *
      * @param initialState
-     *            初始状态
-     * @return 图执行完毕后的最终状态
+     *            The initial state
+     * @return The final state after graph execution finishes
      * @throws org.venus.octopus.common.exception.GraphException
-     *             若执行过程中发生错误
+     *             If an error occurs during execution
      */
     S invoke(S initialState);
 
     /**
-     * 流式执行图，逐节点返回中间状态
+     * Stream executes the graph, returning intermediate states node-by-node.
      * <p>
-     * 每个 Stream 元素代表执行完一个节点后的状态快照。
+     * Each Stream element represents a state snapshot after a node is executed.
      * </p>
      *
      * @param initialState
-     *            初始状态
-     * @return 节点状态流
+     *            The initial state
+     * @return A stream of node outputs
      */
     Stream<NodeOutput<S>> stream(S initialState);
 
     /**
-     * 节点输出，包含节点名称和执行完该节点后的状态
+     * Node output, containing the node name and the state after executing that
+     * node.
      *
      * @param nodeName
-     *            当前执行的节点名称
+     *            The name of the currently executed node
      * @param state
-     *            节点执行后的状态
+     *            The state after node execution
      * @param <S>
-     *            AgentState 类型
+     *            The AgentState type
      */
     record NodeOutput<S extends AgentState>(String nodeName, S state) {
     }

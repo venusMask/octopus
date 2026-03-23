@@ -1,19 +1,19 @@
 package org.venus.octopus.common.exception;
 
 /**
- * 节点执行异常，包含节点名称信息
+ * Exception during node execution, including the node name.
  */
 public class NodeException extends OctopusException {
 
     private final String nodeName;
 
     public NodeException(String nodeName, String message) {
-        super("[节点:" + nodeName + "] " + message);
+        super("[Node:" + nodeName + "] " + message);
         this.nodeName = nodeName;
     }
 
     public NodeException(String nodeName, String message, Throwable cause) {
-        super("[节点:" + nodeName + "] " + message, cause);
+        super("[Node:" + nodeName + "] " + message, cause);
         this.nodeName = nodeName;
     }
 

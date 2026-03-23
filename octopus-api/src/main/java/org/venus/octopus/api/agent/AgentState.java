@@ -4,19 +4,21 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Agent 状态接口
+ * Agent state interface.
  * <p>
- * AgentState 是图流程编排中节点间传递数据的核心载体，本质上是一个类型安全的键值存储。
- * 每个节点接收当前状态，执行完毕后返回更新的状态片段，由框架自动合并到全局状态。
+ * AgentState is the core carrier for data passed between nodes in the graph
+ * flow orchestration, essentially a type-safe key-value store. Each node
+ * receives the current state, and after execution, returns an updated state
+ * slice, which is automatically merged into the global state by the framework.
  * </p>
  *
  * <p>
- * 使用示例：
+ * Usage example:
  * </p>
- * 
+ *
  * <pre>{@code
  * AgentState state = new MapAgentState();
- * state.put("messages", List.of(new HumanMessage("你好")));
+ * state.put("messages", List.of(new HumanMessage("Hello")));
  * state.put("next", "agent");
  *
  * String next = state.get("next"); // "agent"
@@ -25,61 +27,62 @@ import java.util.Optional;
 public interface AgentState {
 
     /**
-     * 根据键获取值
+     * Gets a value by key.
      *
      * @param key
-     *            键
-     * @return 对应的值，若不存在则返回 null
+     *            The key
+     * @return The corresponding value, or null if it does not exist
      */
     <T> T get(String key);
 
     /**
-     * 根据键安全地获取值，返回 Optional
+     * Safely gets a value by key, returning an Optional.
      *
      * @param key
-     *            键
-     * @return Optional 包装的值
+     *            The key
+     * @return An Optional containing the value
      */
     <T> Optional<T> getOptional(String key);
 
     /**
-     * 设置键值对
+     * Sets a key-value pair.
      *
      * @param key
-     *            键
+     *            The key
      * @param value
-     *            值
+     *            The value
      */
     void put(String key, Object value);
 
     /**
-     * 批量合并键值对（将 updates 中的所有条目合并到当前状态）
+     * Batch merges key-value pairs (merges all entries from updates into the
+     * current state).
      *
      * @param updates
-     *            待合并的状态更新
+     *            The state updates to merge
      */
     void merge(Map<String, Object> updates);
 
     /**
-     * 将当前状态转为不可变 Map 视图
+     * Converts the current state to an immutable Map view.
      *
-     * @return 状态的 Map 表示
+     * @return A Map representation of the state
      */
     Map<String, Object> toMap();
 
     /**
-     * 判断是否包含指定键
+     * Checks if the specified key is present.
      *
      * @param key
-     *            键
-     * @return 是否包含
+     *            The key
+     * @return True if present, false otherwise
      */
     boolean containsKey(String key);
 
     /**
-     * 创建当前状态的浅拷贝
+     * Creates a shallow copy of the current state.
      *
-     * @return 状态副本
+     * @return A copy of the state
      */
     AgentState copy();
 }

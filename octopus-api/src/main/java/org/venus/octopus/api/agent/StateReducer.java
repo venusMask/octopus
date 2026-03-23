@@ -1,13 +1,14 @@
 package org.venus.octopus.api.agent;
 
 /**
- * 状态合并函数式接口
+ * Functional interface for state reduction.
  * <p>
- * 定义同一键在多次状态更新时的合并方式。例如消息列表应追加而非覆盖：
+ * Defines how values for the same key are merged during multiple state updates.
+ * For example, a message list should be appended rather than overwritten:
  * </p>
  *
  * <pre>{@code
- * // 消息列表追加策略
+ * // Message list append strategy
  * StateReducer<List<Message>> appendReducer = (existing, newValue) -> {
  *     List<Message> merged = new ArrayList<>(existing);
  *     merged.addAll(newValue);
@@ -16,19 +17,19 @@ package org.venus.octopus.api.agent;
  * }</pre>
  *
  * @param <T>
- *            值类型
+ *            Value type
  */
 @FunctionalInterface
 public interface StateReducer<T> {
 
     /**
-     * 合并两个值
+     * Reduces two values into one.
      *
      * @param existing
-     *            当前已有的值
+     *            The existing value
      * @param newValue
-     *            新到来的值
-     * @return 合并后的值
+     *            The new value
+     * @return The reduced value
      */
     T reduce(T existing, T newValue);
 }

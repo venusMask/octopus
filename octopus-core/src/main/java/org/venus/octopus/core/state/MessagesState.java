@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 支持消息追加策略的专用状态类
+ * Dedicated state class supporting a message appending strategy.
  * <p>
- * 针对键（"messages"）实现了天然的 Reducer 原理。 当往 "messages" 键
- * {@link #put(String, Object)} 数据时， 如果传入的是一个 {@link Message} 或
- * Collection&lt;Message&gt;，它将被追加到现有消息队列末尾，而不是覆盖原有值。 这对于基于 LLM 的连续对话 Agent
- * 至关重要。
+ * Implements a natural Reducer principle for the key ("messages"). When putting
+ * data into the "messages" key using {@link #put(String, Object)}, if the input
+ * is a {@link Message} or Collection&lt;Message&gt;, it will be appended to the
+ * end of the existing message queue instead of overwriting the original value.
+ * This is crucial for LLM-based continuous conversation agents.
  * </p>
  */
 public class MessagesState extends MapAgentState {
@@ -22,7 +23,7 @@ public class MessagesState extends MapAgentState {
 
     public MessagesState() {
         super();
-        // 初始化空的消息队列
+        // Initialize an empty message queue
         super.put(MESSAGES_KEY, new ArrayList<Message>());
     }
 
@@ -42,15 +43,17 @@ public class MessagesState extends MapAgentState {
                 existing = new ArrayList<>();
                 super.put(key, existing);
             }
-            // 依据不同传入类型执行“追加”逻辑
+            // Execute "append" logic based on different input types
             if (value instanceof Collection<?> newMessages) {
                 existing.addAll((Collection<? extends Message>) newMessages);
             } else if (value instanceof Message newMessage) {
                 existing.add(newMessage);
-            } else if (value == null) {
-                // 如果传入 null 且覆盖的是 message，原则上不作处理或抛异常，这里选择安全地忽略
+                // If null is passed and overwrites a message, in principle, it should not be
+                // processed or an exception should be thrown; here we choose to safely ignore
+                // it.
             } else {
-                throw new IllegalArgumentException("messages 键只能追加 Message 集合或单个 Message 对象");
+                throw new IllegalArgumentException(
+                        "The 'messages' key can only append a Collection of Messages or a single Message object");
             }
         } else {
             // 普通键正常覆盖
@@ -61,7 +64,8 @@ public class MessagesState extends MapAgentState {
     @Override
     public void merge(Map<String, Object> updates) {
         if (updates != null) {
-            // 这里不能直接调用 super.putAll 因为我们要复用本类覆盖的 put 方法来捕获 messages 的追加逻辑
+            // We cannot call super.putAll directly here because we need to reuse the put
+            // method overridden in this class to capture the append logic for 'messages'.
             for (Map.Entry<String, Object> entry : updates.entrySet()) {
                 this.put(entry.getKey(), entry.getValue());
             }
@@ -69,7 +73,7 @@ public class MessagesState extends MapAgentState {
     }
 
     /**
-     * 快捷获取消息列表
+     * Shortcut to get the message list.
      */
     public List<Message> getMessages() {
         return get(MESSAGES_KEY);

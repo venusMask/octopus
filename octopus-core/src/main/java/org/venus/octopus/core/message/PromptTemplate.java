@@ -11,9 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 提示词模板
+ * Prompt template.
  * <p>
- * 支持简单的 {@code {variable}} 占位符替换。 独立于具体的图逻辑，可通用于任何模型调用前的数据准备。
+ * Supports simple {@code {variable}} placeholder substitution. Independent of
+ * specific graph logic, it can be used for data preparation before any model
+ * call.
  * </p>
  */
 public class PromptTemplate {
@@ -28,18 +30,18 @@ public class PromptTemplate {
     }
 
     public PromptTemplate(String template, ReadableConfig config) {
-        AssertUtils.notNull(template, "模板内容不能为 null");
-        AssertUtils.notNull(config, "配置不能为 null");
+        AssertUtils.notNull(template, "Template content cannot be null");
+        AssertUtils.notNull(config, "Configuration cannot be null");
         this.template = template;
         this.config = config;
     }
 
     /**
-     * 将变量 Map 渲染到模板中
+     * Renders a variable Map into the template.
      *
      * @param variables
-     *            变量字典
-     * @return 渲染后的字符串
+     *            The variable dictionary
+     * @return The rendered string
      */
     public String format(Map<String, Object> variables) {
         if (variables == null || variables.isEmpty()) {
@@ -60,7 +62,7 @@ public class PromptTemplate {
                 if (policy == MissingVariablePolicy.REPLACE_EMPTY) {
                     matcher.appendReplacement(result, "");
                 } else if (policy == MissingVariablePolicy.THROW_EXCEPTION) {
-                    throw new IllegalArgumentException("模板缺少必要的变量注入: " + varName);
+                    throw new IllegalArgumentException("Template is missing required variable injection: " + varName);
                 } else {
                     // 默认行为：KEEP_ORIGINAL
                     matcher.appendReplacement(result, Matcher.quoteReplacement("{" + varName + "}"));

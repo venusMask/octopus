@@ -15,10 +15,11 @@ public class GraphEngineIntegrationTest {
 
     @Test
     void testBasicGraphExecutionCycle() throws Exception {
-        // 构建图（模拟业务包含：判定、工作节点、以及结束路由）
+        // Build the graph (simulating business logic including decision, worker nodes,
+        // and end routing)
         StateGraph<MapAgentState> graphBuilder = new StateGraph<>(MapAgentState::new);
 
-        // 假装这是调用 LLM 的核心节点
+        // Pretend this is the core node calling the LLM
         graphBuilder.addNode("llm_agent", state -> {
             int rounds = state.containsKey("rounds") ? (int) state.get("rounds") : 0;
             state.put("rounds", rounds + 1);
@@ -26,30 +27,30 @@ public class GraphEngineIntegrationTest {
             return state;
         });
 
-        // 假装这是执行外部工具的节点
+        // Pretend this is the node executing an external tool
         graphBuilder.addNode("mock_tool", state -> {
             state.put("tool_result", "executed successfully");
             return state;
         });
 
-        // 装配边
+        // Assemble edges
         graphBuilder.addEdge(Graph.START, "llm_agent");
 
-        // 装配条件路由：如果 LLM 说去 tool 就去，否则去 END
+        // Assemble conditional routing: go to tool if LLM says so, otherwise go to END
         graphBuilder.addConditionalEdges("llm_agent", state -> (String) state.get("next_route"),
                 Map.of("mock_tool", "mock_tool", "end", Graph.END));
 
-        // 工具结束后必定切回 LLM 再次评估
+        // After the tool finishes, it must switch back to the LLM for re-evaluation
         graphBuilder.addEdge("mock_tool", "llm_agent");
 
-        // 编译并启动状态机验证
+        // Compile and start the state machine validation
         CompiledGraph<MapAgentState> compiledGraph = graphBuilder.compile();
         MapAgentState initialState = new MapAgentState();
         initialState.put("rounds", 0);
 
         MapAgentState resultState = compiledGraph.invoke(initialState);
 
-        // 验证最后结果
+        // Verify the final result
         assertNotNull(resultState);
         assertEquals(3, (Integer) resultState.get("rounds"),
                 "Agent should have been called 3 times (0->1, 1->2, 2->3)");

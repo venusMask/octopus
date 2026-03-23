@@ -20,25 +20,26 @@ public class MessageAndMemoryIntegrationTest {
 
     @Test
     void testMessageAppendingAndMemoryWindowTruncation() {
-        // 1. 初始化包含特殊 Reducer 追加机制的 MessagesState
+        // 1. Initialize MessagesState containing the special Reducer append mechanism
         MessagesState state = new MessagesState();
 
-        // 2. 模拟 LLM 工作台的消息流水线组装
+        // 2. Simulate message pipeline assembly for the LLM workbench
         Message firstHuman = MessageBuilder.builder().human("What's the weather like in New York?").build().get(0);
 
-        // State 接收第一次新要素，自动追加
+        // State receives the first new element and appends it automatically
         state.put("messages", List.of(firstHuman));
 
-        // 模拟 LLM 想调用天气接口
+        // Simulate LLM wanting to call the weather interface
         AiMessage toolCallMsg = new AiMessage("",
                 List.of(new AiMessage.ToolCall("call_123", "get_weather", Map.of("location", "New York"))));
         state.put("messages", List.of(toolCallMsg));
 
-        // 模拟外部工具执行后的回填
+        // Simulate backfilling after external tool execution
         ToolMessage toolMsg = new ToolMessage("call_123", "get_weather", "Sunny, 25°C");
         state.put("messages", List.of(toolMsg));
 
-        // 断言：虽然用了相同的 key，但集合自动叠加到了 3 条
+        // Assertion: although the same key is used, the collection automatically stacks
+        // to 3 items
         @SuppressWarnings("unchecked")
         List<Message> finalMessages = (List<Message>) state.get("messages");
         assertEquals(3, finalMessages.size());
@@ -46,14 +47,16 @@ public class MessageAndMemoryIntegrationTest {
         assertTrue(finalMessages.get(1) instanceof AiMessage);
         assertTrue(finalMessages.get(2) instanceof ToolMessage);
 
-        // 3. 测试 Memory 的滑动窗口持久化与截断
-        // 滑动窗口设为 2（只保留最新两条交互记录，防止历史过大）
+        // 3. Test the sliding window persistence and truncation of Memory
+        // Sliding window set to 2 (keeps only the two most recent interaction records
+        // to prevent excessively large history)
         ChatMemory memory = new InMemoryChatMemory(2);
         memory.add("session-1", finalMessages);
 
         List<Message> retrieved = memory.get("session-1");
 
-        // 由于设置了 maxMessages=2，第一句话 (HumanMessage) 应该被剔除，这里断言为 2
+        // Since maxMessages=2 is set, the first sentence (HumanMessage) should be
+        // evicted; here it is asserted as 2
         assertEquals(2, retrieved.size());
         assertTrue(retrieved.get(0) instanceof AiMessage);
         assertTrue(retrieved.get(1) instanceof ToolMessage);

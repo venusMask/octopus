@@ -4,9 +4,11 @@ import java.util.*;
 import org.venus.octopus.api.agent.AgentState;
 
 /**
- * 基于 HashMap 的 AgentState 实现
+ * AgentState implementation based on HashMap.
  * <p>
- * 提供线程不安全的简单状态存储，适用于单线程图执行场景。 如需线程安全，可替换底层 Map 为 ConcurrentHashMap。
+ * Provides a simple, thread-unsafe state store, suitable for single-threaded
+ * graph execution scenarios. If thread safety is required, replace the
+ * underlying Map with ConcurrentHashMap.
  * </p>
  */
 public class MapAgentState implements AgentState {
@@ -22,7 +24,7 @@ public class MapAgentState implements AgentState {
     }
 
     /**
-     * 工厂方法，从单个键值创建状态
+     * Factory method to create a state from a single key-value pair.
      */
     public static MapAgentState of(String key, Object value) {
         MapAgentState state = new MapAgentState();
@@ -31,7 +33,7 @@ public class MapAgentState implements AgentState {
     }
 
     /**
-     * 工厂方法，从 Map 创建状态
+     * Factory method to create a state from a Map.
      */
     public static MapAgentState from(Map<String, Object> map) {
         return new MapAgentState(map);
@@ -77,7 +79,7 @@ public class MapAgentState implements AgentState {
     }
 
     /**
-     * 返回当前状态的可变副本，支持链式写入
+     * Returns a mutable copy of the current state, supporting chained writes.
      */
     public MapAgentState with(String key, Object value) {
         MapAgentState copy = new MapAgentState(data);

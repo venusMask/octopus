@@ -1,7 +1,7 @@
 package org.venus.octopus.common.utils;
 
 /**
- * 字符串工具类
+ * String utility class.
  */
 public final class StringUtils {
 
@@ -9,41 +9,42 @@ public final class StringUtils {
     }
 
     /**
-     * 判断字符串是否为 null 或空字符串
+     * Checks if the string is null or empty.
      */
     public static boolean isEmpty(String str) {
         return str == null || str.isEmpty();
     }
 
     /**
-     * 判断字符串是否为 null、空字符串或仅含空白字符
+     * Checks if the string is null, empty, or contains only whitespace.
      */
     public static boolean isBlank(String str) {
         return str == null || str.isBlank();
     }
 
     /**
-     * 判断字符串是否非空（非 null 且非空字符串）
+     * Checks if the string is not empty (neither null nor empty).
      */
     public static boolean isNotEmpty(String str) {
         return !isEmpty(str);
     }
 
     /**
-     * 判断字符串是否非空白
+     * Checks if the string is not blank.
      */
     public static boolean isNotBlank(String str) {
         return !isBlank(str);
     }
 
     /**
-     * 截断字符串到指定长度，超出部分追加省略号
+     * Truncates the string to the specified length, appending an ellipsis if it
+     * exceeds that length.
      *
      * @param str
-     *            原始字符串
+     *            The original string
      * @param maxLen
-     *            最大长度
-     * @return 截断后的字符串
+     *            The maximum length
+     * @return The truncated string
      */
     public static String truncate(String str, int maxLen) {
         if (str == null) {
@@ -56,7 +57,7 @@ public final class StringUtils {
     }
 
     /**
-     * 将字符串首字母大写
+     * Capitalizes the first letter of the string.
      */
     public static String capitalize(String str) {
         if (isEmpty(str)) {

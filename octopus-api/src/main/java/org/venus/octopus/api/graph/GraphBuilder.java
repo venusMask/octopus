@@ -4,79 +4,83 @@ import java.util.Map;
 import org.venus.octopus.api.agent.AgentState;
 
 /**
- * 图构建器接口
+ * Graph builder interface.
  * <p>
- * 提供流式 API 来定义图的结构（节点和边）。构建完毕后通过 {@link #compile()} 生成可执行图。
+ * Provides a fluent API to define the graph structure (nodes and edges). Once
+ * built, an executable graph is generated via {@link #compile()}.
  * </p>
  *
  * @param <S>
- *            AgentState 的具体类型
+ *            The concrete type of AgentState
  */
 public interface GraphBuilder<S extends AgentState> {
 
     /**
-     * 添加节点
+     * Adds a node.
      *
      * @param name
-     *            节点名称（必须唯一）
+     *            The node name (must be unique)
      * @param node
-     *            节点执行逻辑
-     * @return 当前构建器（支持链式调用）
+     *            The node execution logic
+     * @return The current builder (supports fluent chaining)
      */
     GraphBuilder<S> addNode(String name, Node<S> node);
 
     /**
-     * 添加直接边（从 source 节点执行完毕后，直接跳转到 target 节点）
+     * Adds a direct edge (after source node execution, jump directly to target
+     * node).
      *
      * @param source
-     *            源节点名称（可使用 {@link Graph#START}）
+     *            The source node name (can use {@link Graph#START})
      * @param target
-     *            目标节点名称（可使用 {@link Graph#END}）
-     * @return 当前构建器（支持链式调用）
+     *            The target node name (can use {@link Graph#END})
+     * @return The current builder (supports fluent chaining)
      */
     GraphBuilder<S> addEdge(String source, String target);
 
     /**
-     * 添加条件边（从 source 节点执行完毕后，根据路由函数的返回值决定下一个节点）
+     * Adds a conditional edge (after source node execution, decide the next node
+     * based on the routing function result).
      *
      * @param source
-     *            源节点名称
+     *            The source node name
      * @param condition
-     *            路由函数，返回路由键（pathMap 中的 key）
+     *            The routing function, returning a routing key (key in pathMap)
      * @param pathMap
-     *            路由映射，key 为路由函数的返回值，value 为目标节点名称
-     * @return 当前构建器（支持链式调用）
+     *            The routing map, where key is the return value of the routing
+     *            function and value is the target node name
+     * @return The current builder (supports fluent chaining)
      */
     GraphBuilder<S> addConditionalEdges(String source, EdgeCondition<S> condition, Map<String, String> pathMap);
 
     /**
-     * 设置入口节点（等价于 addEdge(Graph.START, entryPoint)）
+     * Sets the entry point node (equivalent to addEdge(Graph.START, entryPoint)).
      *
      * @param entryPoint
-     *            入口节点名称
-     * @return 当前构建器（支持链式调用）
+     *            The entry point node name
+     * @return The current builder (supports fluent chaining)
      */
     default GraphBuilder<S> setEntryPoint(String entryPoint) {
         return addEdge(Graph.START, entryPoint);
     }
 
     /**
-     * 设置终止节点（等价于 addEdge(finishPoint, Graph.END)）
+     * Sets the finish point node (equivalent to addEdge(finishPoint, Graph.END)).
      *
      * @param finishPoint
-     *            终止节点名称
-     * @return 当前构建器（支持链式调用）
+     *            The finish point node name
+     * @return The current builder (supports fluent chaining)
      */
     default GraphBuilder<S> setFinishPoint(String finishPoint) {
         return addEdge(finishPoint, Graph.END);
     }
 
     /**
-     * 编译图，生成可执行的 {@link CompiledGraph}
+     * Compiles the graph, generating an executable {@link CompiledGraph}.
      *
-     * @return 已编译的图
+     * @return The compiled graph
      * @throws org.venus.octopus.common.exception.GraphException
-     *             若图结构不完整或存在错误
+     *             If the graph structure is incomplete or has errors
      */
     CompiledGraph<S> compile();
 }

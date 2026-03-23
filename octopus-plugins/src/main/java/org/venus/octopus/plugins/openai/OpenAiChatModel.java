@@ -57,7 +57,7 @@ public class OpenAiChatModel implements ChatModel {
         String model = (options != null && options.getModelName() != null) ? options.getModelName() : defaultModel;
         requestBody.put("model", model);
 
-        // 设置可选参数
+        // Set optional parameters
         if (options != null) {
             if (options.getTemperature() != null)
                 requestBody.put("temperature", options.getTemperature());
@@ -67,7 +67,7 @@ public class OpenAiChatModel implements ChatModel {
                 requestBody.put("max_tokens", options.getMaxTokens());
         }
 
-        // 构建消息体
+        // Construct message body
         ArrayNode messagesArray = requestBody.putArray("messages");
         for (Message msg : messages) {
             ObjectNode msgNode = messagesArray.addObject();
@@ -82,7 +82,7 @@ public class OpenAiChatModel implements ChatModel {
                 if (!ai.hasToolCalls()) {
                     msgNode.put("content", ai.getContent() == null ? "" : ai.getContent());
                 } else {
-                    // 支持工具调用请求的协议结构组装
+                    // Support protocol structure assembly for tool call requests
                     msgNode.put("content", StringUtils.isEmpty(ai.getContent()) ? "" : ai.getContent());
                     ArrayNode toolCallsArray = msgNode.putArray("tool_calls");
                     for (AiMessage.ToolCall call : ai.getToolCalls()) {
@@ -105,7 +105,7 @@ public class OpenAiChatModel implements ChatModel {
             }
         }
 
-        // 解析并附带允许使用的外部工具 (Tool Definitions)
+        // Parse and include external tools allowed for use (Tool Definitions)
         if (tools != null && !tools.isEmpty()) {
             ArrayNode toolsArray = requestBody.putArray("tools");
             for (ToolSpec tool : tools) {
@@ -167,7 +167,7 @@ public class OpenAiChatModel implements ChatModel {
         JsonNode messageNode = choicesNode.get(0).path("message");
         String content = messageNode.path("content").asText(null);
 
-        // 检测 LLM 是否请求执行工具
+        // Check if the LLM requested tool execution
         List<AiMessage.ToolCall> parsedToolCalls = new ArrayList<>();
         JsonNode toolCallsNode = messageNode.path("tool_calls");
         if (toolCallsNode.isArray()) {
@@ -190,7 +190,7 @@ public class OpenAiChatModel implements ChatModel {
             finalMessage = new AiMessage(content, parsedToolCalls);
         }
 
-        // 解析 Token 消耗数据
+        // Parse Token usage data
         TokenUsage usage = TokenUsage.EMPTY;
         JsonNode usageNode = rootNode.path("usage");
         if (!usageNode.isMissingNode()) {

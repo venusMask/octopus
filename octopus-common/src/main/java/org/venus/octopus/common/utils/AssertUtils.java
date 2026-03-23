@@ -5,9 +5,10 @@ import java.util.Map;
 import org.venus.octopus.common.exception.OctopusException;
 
 /**
- * 参数断言工具类
+ * Parameter assertion utility class.
  * <p>
- * 断言失败时抛出 {@link IllegalArgumentException} 或 {@link OctopusException}。
+ * Throws {@link IllegalArgumentException} or {@link OctopusException} when an
+ * assertion fails.
  * </p>
  */
 public final class AssertUtils {
@@ -16,14 +17,14 @@ public final class AssertUtils {
     }
 
     /**
-     * 断言对象不为 null
+     * Asserts that the object is not null.
      *
      * @param obj
-     *            被检查的对象
+     *            The object to check
      * @param message
-     *            错误信息
+     *            The error message
      * @throws IllegalArgumentException
-     *             如果对象为 null
+     *             If the object is null
      */
     public static void notNull(Object obj, String message) {
         if (obj == null) {
@@ -32,14 +33,14 @@ public final class AssertUtils {
     }
 
     /**
-     * 断言字符串不为空
+     * Asserts that the string is not empty.
      *
      * @param str
-     *            被检查的字符串
+     *            The string to check
      * @param message
-     *            错误信息
+     *            The error message
      * @throws IllegalArgumentException
-     *             如果字符串为 null 或空
+     *             If the string is null or empty
      */
     public static void notEmpty(String str, String message) {
         if (StringUtils.isEmpty(str)) {
@@ -48,14 +49,14 @@ public final class AssertUtils {
     }
 
     /**
-     * 断言集合不为空
+     * Asserts that the collection is not empty.
      *
      * @param collection
-     *            被检查的集合
+     *            The collection to check
      * @param message
-     *            错误信息
+     *            The error message
      * @throws IllegalArgumentException
-     *             如果集合为 null 或空
+     *             If the collection is null or empty
      */
     public static void notEmpty(Collection<?> collection, String message) {
         if (collection == null || collection.isEmpty()) {
@@ -64,14 +65,14 @@ public final class AssertUtils {
     }
 
     /**
-     * 断言 Map 不为空
+     * Asserts that the Map is not empty.
      *
      * @param map
-     *            被检查的 Map
+     *            The Map to check
      * @param message
-     *            错误信息
+     *            The error message
      * @throws IllegalArgumentException
-     *             如果 Map 为 null 或空
+     *             If the Map is null or empty
      */
     public static void notEmpty(Map<?, ?> map, String message) {
         if (map == null || map.isEmpty()) {
@@ -80,14 +81,14 @@ public final class AssertUtils {
     }
 
     /**
-     * 断言条件为 true
+     * Asserts that the condition is true.
      *
      * @param condition
-     *            条件表达式
+     *            The condition expression
      * @param message
-     *            错误信息
+     *            The error message
      * @throws IllegalArgumentException
-     *             如果条件为 false
+     *             If the condition is false
      */
     public static void isTrue(boolean condition, String message) {
         if (!condition) {
@@ -96,14 +97,14 @@ public final class AssertUtils {
     }
 
     /**
-     * 断言条件为 false
+     * Asserts that the condition is false.
      *
      * @param condition
-     *            条件表达式
+     *            The condition expression
      * @param message
-     *            错误信息
+     *            The error message
      * @throws IllegalArgumentException
-     *             如果条件为 true
+     *             If the condition is true
      */
     public static void isFalse(boolean condition, String message) {
         if (condition) {

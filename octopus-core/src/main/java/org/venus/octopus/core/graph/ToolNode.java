@@ -13,11 +13,13 @@ import org.venus.octopus.common.utils.CollectionUtils;
 import java.util.List;
 
 /**
- * 包装了完全自主处理逻辑的内置工具节点
+ * Built-in tool node that encapsulates fully autonomous processing logic.
  * <p>
- * 它假定 AgentState 中包含一个名叫 "messages" 的键。 运行时从最后一条消息中读取内容，若判定为需要调用工具的
- * AiMessage，则将其转发给 {@link ToolExecutor}。 最终生成的 {@link ToolMessage} 列表将被封存在一个全新的
- * Map 中返回。
+ * It assumes that AgentState contains a key named "messages". At runtime, it
+ * reads the content from the last message. If it is determined to be an
+ * AiMessage requiring tool calls, it is forwarded to the {@link ToolExecutor}.
+ * The final list of {@link ToolMessage} will be returned sealed in a brand new
+ * Map.
  * </p>
  */
 public class ToolNode<S extends AgentState> implements Node<S> {
@@ -36,26 +38,31 @@ public class ToolNode<S extends AgentState> implements Node<S> {
     public S process(S state) {
         List<Message> messages = state.get("messages");
         if (CollectionUtils.isEmpty(messages)) {
-            // 没有消息记录，无法执行工具，静默跳过
+            // No message history, unable to execute tools, silently skipping
             return state;
         }
 
         Message lastMessage = messages.get(messages.size() - 1);
 
-        // 只有倒数第一条是 AI 发起的调用请求才应当执行处理
+        // Processing should only be executed if the last message is a call request
+        // initiated by AI
         if (!(lastMessage instanceof AiMessage aiMessage)) {
-            throw new NodeException("tool_node", "工具节点要求状态中最后一条消息必须是 AiMessage");
+            throw new NodeException("tool_node",
+                    "The tool node requires that the last message in the state must be an AiMessage");
         }
 
         if (!aiMessage.hasToolCalls()) {
-            // 没有发生调用求（有些模型可能直接回复普通文本）
+            // No call request occurred (some models may reply directly with plain text)
             return state;
         }
 
-        // 调用底层独立的执行器完成参数组装与执行
+        // Invoke the underlying standalone executor to complete parameter assembly and
+        // execution
         List<ToolMessage> results = executor.execute(aiMessage);
 
-        // 返回局部更新字典，由于外部使用了 MessagesState，这些新的 ToolMessage 会被安全并且按序追加进整个消息列表
+        // Returns a local update dictionary. Since a MessagesState is used externally,
+        // these new ToolMessages will be safely appended to the entire message list in
+        // order.
         state.put("messages", results);
         return state;
     }

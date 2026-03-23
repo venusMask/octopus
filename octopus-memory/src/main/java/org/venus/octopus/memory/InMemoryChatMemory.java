@@ -12,10 +12,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 默认的基于本地内存的 {@link ChatMemory} 实现
+ * Default local in-memory {@link ChatMemory} implementation.
  * <p>
- * 使用线程安全的 {@link ConcurrentHashMap} 保证并发正确性。
- * 提供基础的按消息条数阈值淘汰机制以控制内存利用率和避免大模型超限问题。
+ * Uses thread-safe {@link ConcurrentHashMap} to ensure concurrency correctness.
+ * Provides a basic eviction mechanism based on a message count threshold to
+ * control memory utilization and avoid LLM token limit issues.
  * </p>
  */
 public class InMemoryChatMemory implements ChatMemory {
@@ -26,20 +27,21 @@ public class InMemoryChatMemory implements ChatMemory {
     private final int maxMessages;
 
     /**
-     * 默认构造函数，单个会话历史默认保留 100 条
+     * Default constructor, keeps 100 messages per session by default.
      */
     public InMemoryChatMemory() {
         this(100);
     }
 
     /**
-     * 自定义容量规格的构造函数
+     * Constructor with custom capacity specification.
      *
      * @param maxMessages
-     *            保留的最大历史消息数，超过时将从头部剔除最早的消息
+     *            Maximum number of historical messages to keep; when exceeded, the
+     *            earliest messages will be removed from the head
      */
     public InMemoryChatMemory(int maxMessages) {
-        AssertUtils.isTrue(maxMessages > 0, "maxMessages 必须大于 0");
+        AssertUtils.isTrue(maxMessages > 0, "maxMessages must be greater than 0");
         this.maxMessages = maxMessages;
         log.info("Initialized InMemoryChatMemory with maxMessages per session = {}", maxMessages);
     }
@@ -57,11 +59,13 @@ public class InMemoryChatMemory implements ChatMemory {
             }
             existing.addAll(messages);
 
-            // 执行窗口截断保护机制
+            // Execute window truncation protection mechanism
             if (existing.size() > maxMessages) {
                 int oldSize = existing.size();
                 existing = new ArrayList<>(existing.subList(existing.size() - maxMessages, existing.size()));
-                log.debug("Session [{}] 上下文已达阈值, [{}] 条最早记录已被安全截断", sessionId, oldSize - existing.size());
+                log.debug(
+                        "Session [{}] context has reached the threshold, [{}] earliest records have been safely truncated",
+                        sessionId, oldSize - existing.size());
             }
             return existing;
         });
@@ -78,7 +82,8 @@ public class InMemoryChatMemory implements ChatMemory {
     public List<Message> get(String sessionId) {
         AssertUtils.notEmpty(sessionId, "SessionId Cannot be empty");
         List<Message> history = store.get(sessionId);
-        // 返回包含数据的安全副本，保证外部修改不污染内部上下文
+        // Returns a safe copy containing the data, ensuring that external modifications
+        // do not pollute the internal context
         return history != null ? new ArrayList<>(history) : new ArrayList<>();
     }
 

@@ -12,10 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 独立的工具执行器
+ * Standalone tool executor.
  * <p>
- * 专门负责解析 {@link AiMessage.ToolCall}，在 {@link ToolRegistry} 中匹配相应的工具并执行。
- * 执行过程保证异常安全，若工具抛出异常，将捕获并转化为内容为错误信息的 {@link ToolMessage} 告知 LLM。
+ * Responsible for parsing {@link AiMessage.ToolCall}, matching the
+ * corresponding tool in {@link ToolRegistry}, and executing it. The execution
+ * process ensures exception safety. If a tool throws an exception, it will be
+ * captured and converted into a {@link ToolMessage} containing the error
+ * message to inform the LLM.
  * </p>
  */
 public class ToolExecutor {
@@ -25,16 +28,17 @@ public class ToolExecutor {
     private final ToolRegistry registry;
 
     public ToolExecutor(ToolRegistry registry) {
-        AssertUtils.notNull(registry, "ToolRegistry 不能为 null");
+        AssertUtils.notNull(registry, "ToolRegistry cannot be null");
         this.registry = registry;
     }
 
     /**
-     * 执行消息中包含的发起调用请求，生成响应结果集合
+     * Executes the tool call requests contained in the message and generates a set
+     * of response results.
      *
      * @param toolCalls
-     *            LLM发回的工具调用请求列表
-     * @return 执行完成后的 ToolMessage 结果列表
+     *            The list of tool call requests sent back by the LLM
+     * @return The list of ToolMessage results after execution
      */
     public List<ToolMessage> executeAll(List<AiMessage.ToolCall> toolCalls) {
         if (toolCalls == null || toolCalls.isEmpty()) {
@@ -50,17 +54,22 @@ public class ToolExecutor {
             String resultContent;
             try {
                 if (tool == null) {
-                    throw new ToolException(toolName, "请求调用的工具 '" + toolName + "' 未在注册表中找到");
+                    throw new ToolException(toolName,
+                            "The requested tool '" + toolName + "' was not found in the registry");
                 }
 
-                log.debug("开始执行工具 [{}] (callId: {})，参数: {}", toolName, call.id(), call.arguments());
+                log.debug("Starting to execute tool [{}] (callId: {}), arguments: {}", toolName, call.id(),
+                        call.arguments());
                 // 同步执行工具逻辑
                 resultContent = tool.execute(call.arguments());
-                log.debug("工具 [{}] 执行完毕，结果长度: {}", toolName, resultContent != null ? resultContent.length() : 0);
+                log.debug("Tool [{}] execution completed, result length: {}", toolName,
+                        resultContent != null ? resultContent.length() : 0);
 
             } catch (Exception e) {
-                // 执行过程出错需要捕获，将错误信息作为回复返回给 LLM（这是标准 Function Calling 的容错做法）
-                log.warn("工具 [{}] (callId: {}) 执行发生异常", toolName, call.id(), e);
+                // Errors during execution need to be captured, and the error message returned
+                // to the LLM as a response (this is a standard fault-tolerance practice for
+                // Function Calling).
+                log.warn("Exception occurred during execution of tool [{}] (callId: {})", toolName, call.id(), e);
                 resultContent = "Error executing tool: " + e.getMessage();
             }
 
@@ -76,11 +85,13 @@ public class ToolExecutor {
     }
 
     /**
-     * 从 AiMessage 中提取工具并执行。如果是普通消息（无调用），则返回空列表。
+     * Extracts tools from AiMessage and executes them. If it's a normal message (no
+     * calls), returns an empty list.
      *
      * @param aiMessage
-     *            LLM 发回的包含潜在调用请求的消息
-     * @return 工具执行结果
+     *            The message sent back by the LLM containing potential call
+     *            requests
+     * @return Tool execution results
      */
     public List<ToolMessage> execute(AiMessage aiMessage) {
         if (aiMessage == null || !aiMessage.hasToolCalls()) {

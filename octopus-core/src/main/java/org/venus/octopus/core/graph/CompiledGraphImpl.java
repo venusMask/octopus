@@ -7,14 +7,15 @@ import org.venus.octopus.api.graph.CompiledGraph;
 import org.venus.octopus.core.runner.GraphRunner;
 
 /**
- * 已编译图的具体实现
+ * Concrete implementation of a compiled graph.
  * <p>
- * 持有图结构定义 {@link GraphDefinition} 和运行器 {@link GraphRunner}， 提供 {@link #invoke}
- * 和 {@link #stream} 两种执行模式。
+ * Holds the graph structure definition {@link GraphDefinition} and the runner
+ * {@link GraphRunner}, providing two execution modes: {@link #invoke} and
+ * {@link #stream}.
  * </p>
  *
  * @param <S>
- *            AgentState 类型
+ *            AgentState type
  */
 public class CompiledGraphImpl<S extends AgentState> implements CompiledGraph<S> {
 
@@ -27,11 +28,11 @@ public class CompiledGraphImpl<S extends AgentState> implements CompiledGraph<S>
     }
 
     /**
-     * 同步执行图，阻塞直到结束
+     * Executes the graph synchronously, blocking until completion.
      *
      * @param initialState
-     *            初始状态
-     * @return 最终状态
+     *            Initial state
+     * @return Final state
      */
     @Override
     public S invoke(S initialState) {
@@ -39,11 +40,12 @@ public class CompiledGraphImpl<S extends AgentState> implements CompiledGraph<S>
     }
 
     /**
-     * 流式执行图，逐节点返回中间状态
+     * Executes the graph in a streaming fashion, returning intermediate states node
+     * by node.
      *
      * @param initialState
-     *            初始状态
-     * @return 节点输出流
+     *            Initial state
+     * @return Node output stream
      */
     @Override
     public Stream<NodeOutput<S>> stream(S initialState) {

@@ -3,27 +3,31 @@ package org.venus.octopus.api.graph;
 import org.venus.octopus.api.agent.AgentState;
 
 /**
- * 节点接口
+ * Node interface.
  * <p>
- * 节点是图流程中的基本执行单元。每个节点接收当前 AgentState， 执行业务逻辑后返回更新后的状态（或状态片段）。
+ * A node is the basic execution unit in a graph flow. Each node receives the
+ * current AgentState, executes business logic, and returns the updated state
+ * (or a state slice).
  * </p>
  *
  * <p>
- * 建议使用函数式写法（如 Lambda 表达式）通过 {@link NodeAction} 定义简单节点。
+ * Functional implementation (e.g., Lambda expressions) via {@link NodeAction}
+ * is recommended for simple nodes.
  * </p>
  *
  * @param <S>
- *            AgentState 的具体类型
+ *            The concrete type of AgentState
  */
 @FunctionalInterface
 public interface Node<S extends AgentState> {
 
     /**
-     * 执行节点逻辑
+     * Executes the node logic.
      *
      * @param state
-     *            当前 Agent 状态
-     * @return 更新后的状态（通常为包含变更项的新状态或原状态的副本）
+     *            The current Agent state
+     * @return The updated state (usually a new state containing changes or a copy
+     *         of the original state)
      */
     S process(S state);
 }

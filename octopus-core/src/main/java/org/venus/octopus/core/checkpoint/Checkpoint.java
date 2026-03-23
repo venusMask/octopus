@@ -4,63 +4,66 @@ import java.util.*;
 import org.venus.octopus.api.agent.AgentState;
 
 /**
- * 检查点接口
+ * Checkpoint interface.
  * <p>
- * 检查点在每个节点执行完毕后保存状态快照，支持从历史检查点恢复执行（断点续跑）。 不同的 threadId 对应不同用户/会话的执行上下文，互相隔离。
+ * Checkpoints save state snapshots after each node's execution, supporting
+ * recovery from historical checkpoints (breakpoint resume). Different threadIds
+ * correspond to execution contexts for different users/sessions, isolated from
+ * each other.
  * </p>
  *
  * @param <S>
- *            AgentState 类型
+ *            AgentState type
  */
 public interface Checkpoint<S extends AgentState> {
 
     /**
-     * 保存一个检查点
+     * Saves a checkpoint.
      *
      * @param threadId
-     *            线程/会话 ID
+     *            Thread/Session ID
      * @param nodeName
-     *            刚执行完毕的节点名称
+     *            The name of the node that just finished execution
      * @param state
-     *            节点执行后的状态
+     *            The state after node execution
      */
     void save(String threadId, String nodeName, S state);
 
     /**
-     * 获取最新的检查点状态
+     * Gets the latest checkpoint state.
      *
      * @param threadId
-     *            线程/会话 ID
-     * @return 最新状态，若无则返回 empty
+     *            Thread/Session ID
+     * @return The latest state, or empty if none
      */
     Optional<S> getLatest(String threadId);
 
     /**
-     * 获取指定线程的所有检查点列表（按保存顺序）
+     * Gets a list of all checkpoints for a specified thread (in saved order).
      *
      * @param threadId
-     *            线程/会话 ID
-     * @return 检查点快照列表
+     *            Thread/Session ID
+     * @return Checkpoint snapshot list
      */
     List<CheckpointEntry<S>> getHistory(String threadId);
 
     /**
-     * 清除指定线程的所有检查点
+     * Clears all checkpoints for a specified thread.
      *
      * @param threadId
-     *            线程/会话 ID
+     *            Thread/Session ID
      */
     void clear(String threadId);
 
     /**
-     * 单次检查点记录
+     * Single checkpoint record.
      *
      * @param nodeName
-     *            节点名称
+     *            Node name
      * @param state
-     *            状态快照
+     *            State snapshot
      * @param timestamp
-     *            保存时间戳（毫秒）
+     *            Save timestamp (milliseconds)
      */
     record CheckpointEntry<S extends AgentState>(String nodeName, S state, long timestamp) {
     }

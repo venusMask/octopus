@@ -5,20 +5,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.venus.octopus.api.agent.AgentState;
 
 /**
- * 基于内存的检查点实现
+ * In-memory checkpoint implementation.
  * <p>
- * 将所有检查点保存在内存中，适用于开发测试场景。 进程重启后数据丢失，如需持久化，可实现 {@link Checkpoint} 接口并接入数据库。
+ * Saves all checkpoints in memory, suitable for development and testing
+ * scenarios. Data is lost after process restart; if persistence is required,
+ * implement the {@link Checkpoint} interface and connect to a database.
  * </p>
  * <p>
- * 本实现是线程安全的。
+ * This implementation is thread-safe.
  * </p>
  *
  * @param <S>
- *            AgentState 类型
+ *            AgentState type
  */
 public class InMemoryCheckpoint<S extends AgentState> implements Checkpoint<S> {
 
-    /** key: threadId, value: 该线程的检查点历史列表 */
+    /** key: threadId, value: The checkpoint history list for this thread */
     private final Map<String, List<CheckpointEntry<S>>> store = new ConcurrentHashMap<>();
 
     @Override
@@ -51,7 +53,7 @@ public class InMemoryCheckpoint<S extends AgentState> implements Checkpoint<S> {
     }
 
     /**
-     * 获取所有 threadId 列表
+     * Gets a list of all threadIds.
      */
     public Set<String> getAllThreadIds() {
         return Collections.unmodifiableSet(store.keySet());

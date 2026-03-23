@@ -1,9 +1,10 @@
 package org.venus.octopus.common.exception;
 
 /**
- * Octopus 框架基础运行时异常
+ * Base runtime exception for the Octopus framework.
  * <p>
- * 所有框架内部异常均继承自本类，便于统一捕获处理。
+ * All framework internal exceptions inherit from this class for unified
+ * handling.
  * </p>
  */
 public class OctopusException extends RuntimeException {
